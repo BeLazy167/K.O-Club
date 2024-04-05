@@ -9,4 +9,5 @@ export default {
     connectionString: env.DATABASE_URL,
   },
   tablesFilter: ["client_*"],
+  out: "./src/server/db",
 } satisfies Config;

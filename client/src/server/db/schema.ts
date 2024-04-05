@@ -19,25 +19,7 @@ import { type AdapterAccount } from "next-auth/adapters";
  */
 export const createTable = pgTableCreator((name) => `client_${name}`);
 
-export const posts = createTable(
-  "post",
-  {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
-    createdById: varchar("createdById", { length: 255 })
-      .notNull()
-      .references(() => users.id),
-    createdAt: timestamp("created_at")
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt"),
-  },
-  (example) => ({
-    createdByIdIdx: index("createdById_idx").on(example.createdById),
-    nameIndex: index("name_idx").on(example.name),
-  })
-);
-
+// Define the "users" table
 export const users = createTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   name: varchar("name", { length: 255 }),
@@ -46,12 +28,19 @@ export const users = createTable("user", {
     mode: "date",
   }).default(sql`CURRENT_TIMESTAMP`),
   image: varchar("image", { length: 255 }),
+  username: varchar("username", { length: 255 }),
 });
 
+// Define the relations for the "users" table
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
 }));
+export const usersClubRelations = relations(users, ({ many }) => ({
+  fights: many(fights),
+  subscriptions: many(subscriptions),
+}));
 
+// Define the "accounts" table
 export const accounts = createTable(
   "account",
   {
@@ -76,13 +65,15 @@ export const accounts = createTable(
       columns: [account.provider, account.providerAccountId],
     }),
     userIdIdx: index("account_userId_idx").on(account.userId),
-  })
+  }),
 );
 
+// Define the relations for the "accounts" table
 export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] }),
 }));
 
+// Define the "sessions" table
 export const sessions = createTable(
   "session",
   {
@@ -96,13 +87,15 @@ export const sessions = createTable(
   },
   (session) => ({
     userIdIdx: index("session_userId_idx").on(session.userId),
-  })
+  }),
 );
 
+// Define the relations for the "sessions" table
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),
 }));
 
+// Define the "verificationTokens" table
 export const verificationTokens = createTable(
   "verificationToken",
   {
@@ -112,5 +105,42 @@ export const verificationTokens = createTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );
+
+// Define the "fights" table
+export const fights = createTable("fights", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  latitude: text("latitude").notNull(),
+  longitude: text("longitude").notNull(),
+  dateTime: timestamp("date_time").notNull(),
+  authorId: text("author_id").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Define the "subscriptions" table
+export const subscriptions = createTable("subscriptions", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").references(() => users.id),
+  fightId: text("fight_id").references(() => fights.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Define the relations for the "fights" table
+export const fightsRelations = relations(fights, ({ many }) => ({
+  subscriptions: many(subscriptions),
+}));
+
+// Define the relations for the "subscriptions" table
+export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
+  user: one(users, {
+    fields: [subscriptions.userId],
+    references: [users.id],
+  }),
+  fight: one(fights, {
+    fields: [subscriptions.fightId],
+    references: [fights.id],
+  }),
+}));

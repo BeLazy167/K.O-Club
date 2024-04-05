@@ -1,0 +1,34 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1712202644011,
+      "tag": "0000_naive_pretty_boy",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1712203523227,
+      "tag": "0001_fine_eternals",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1712203905011,
+      "tag": "0002_loose_alex_power",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1712204063482,
+      "tag": "0003_even_golden_guardian",
+      "breakpoints": true
+    }
+  ]
+}
