@@ -2,7 +2,6 @@ import { sign } from "crypto";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import SignIn from "./SignIn";
 
 export default function LandingPage() {
   return (
@@ -18,13 +17,7 @@ export default function LandingPage() {
           </p>
         </div>
         <div className="mx-auto w-full max-w-sm space-y-2">
-          <SignIn />
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            Login to get started {/* sign in with google */}
-            <Link className="underline underline-offset-2" href="#">
-              Terms & Conditions
-            </Link>
-          </p>
+          
         </div>
       </div>
     </section>

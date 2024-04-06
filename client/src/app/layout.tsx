@@ -3,6 +3,7 @@ import "~/styles/globals.css";
 import { Inter } from "next/font/google";
 import Navbar from "~/components/Navbar";
 import Footer from "~/components/Footer";
+import SessionWrapper from "~/components/SessionWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,14 +22,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
-        <div className="align-self flex min-h-[100dvh] flex-col justify-between">
-          <Navbar />
-          {children}
-          <Footer />
-        </div>
-      </body>
-    </html>
+    <SessionWrapper>
+      <html lang="en">
+        <body className={`font-sans ${inter.variable}`}>
+          <div className="align-self flex min-h-[100dvh] flex-col justify-between">
+            <Navbar />
+            {children}
+            <Footer />
+          </div>
+        </body>
+      </html>
+    </SessionWrapper>
   );
 }
