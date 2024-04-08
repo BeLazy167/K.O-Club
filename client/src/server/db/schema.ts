@@ -110,14 +110,20 @@ export const verificationTokens = createTable(
 
 // Define the "fights" table
 export const fights = createTable("fights", {
-  id: text("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
   title: text("title").notNull(),
-  description: text("description").notNull(),
-  latitude: text("latitude").notNull(),
-  longitude: text("longitude").notNull(),
+  description: text("description"),
+  location: text("location").notNull(),
   dateTime: timestamp("date_time").notNull(),
-  authorId: text("author_id").references(() => users.id),
+  authorId: text("author_id")
+    .references(() => users.id)
+    .notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  challengedId: text("challenged_id")
+    .references(() => users.id)
+    .notNull(),
 });
 
 // Define the "subscriptions" table
@@ -143,4 +149,15 @@ export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
     fields: [subscriptions.fightId],
     references: [fights.id],
   }),
+}));
+
+// each user can have many fights
+export const usersFightsRelations = relations(users, ({ many }) => ({
+  fights: many(fights),
+}));
+
+//each fight has 2 users
+export const fightsUsersRelations = relations(fights, ({ one }) => ({
+  authorId: one(users),
+  challegedId: one(users),
 }));
