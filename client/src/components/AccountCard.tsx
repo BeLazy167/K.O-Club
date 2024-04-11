@@ -13,37 +13,78 @@ import { Button } from "~/components/ui/button";
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useState } from "react";
-import { Session } from "next-auth";
+import { useToast } from "~/components/ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
 export interface apires {
   username: string;
 }
+const updateUsername = async (username: string): Promise<apires> => {
+  const response = await fetch("/api/username", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ username }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Error updating schema");
+  }
+
+  return response.json() as Promise<apires>;
+};
+
 export function AccountCard() {
   const { data: session } = useSession();
+  const { toast } = useToast();
   const [username, setUsername] = useState("");
+  const { mutate: updateUsernameMutation, isPending } = useMutation<
+    apires,
+    Error,
+    string
+  >({
+    mutationFn: updateUsername,
+    onSuccess(data, variables, context) {
+      toast({
+        title: "Success",
+        description: `updated to ${data.username ?? " "}`,
+        variant: "default",
+      });
+    },
+    onError(error, variables, context) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const response = await fetch("/api/username", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username }),
-      });
+    // try {
+    //   const response = await fetch("/api/username", {
+    //     method: "PUT",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ username }),
+    //   });
 
-      if (response.ok) {
-        // Schema updated successfully
-        const { username } = (await response.json()) as apires;
-        setUsername(() => username);
-      } else {
-        // Handle error case
-        console.error("Error updating schema");
-      }
-    } catch (error) {
-      console.error("Error updating schema:", error);
-      // Handle error case
-    }
+    //   if (response.ok) {
+    //     // Schema updated successfully
+    //     const { username } = (await response.json()) as apires;
+    //     setUsername(() => username);
+    //   } else {
+    //     // Handle error case
+    //     console.error("Error updating schema");
+    //   }
+    // } catch (error) {
+    //   console.error("Error updating schema:", error);
+    //   // Handle error case
+    // }
+
+    updateUsernameMutation(username);
   };
 
   if (session) {
@@ -91,12 +132,12 @@ export function AccountCard() {
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
-            <Button type="submit">Save</Button>
+            <Button disabled={isPending} type="submit">
+              Save
+            </Button>
           </form>
         </CardContent>
       </Card>
     );
   }
-
-  return null;
 }

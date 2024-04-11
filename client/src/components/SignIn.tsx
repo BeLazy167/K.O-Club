@@ -6,6 +6,7 @@ import { useState } from "react";
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
+  
   const handleSignIn = async () => {
     // Sign in with the next-auth signIn method
     try {

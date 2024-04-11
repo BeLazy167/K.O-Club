@@ -43,6 +43,13 @@
       "when": 1712493026067,
       "tag": "0005_whole_wolf_cub",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1712716268815,
+      "tag": "0006_exotic_revanche",
+      "breakpoints": true
     }
   ]
 }

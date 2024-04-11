@@ -1,0 +1,2 @@
+ALTER TABLE "client_fights" ADD COLUMN "author_accepted" boolean DEFAULT true NOT NULL;--> statement-breakpoint
+ALTER TABLE "client_fights" ADD COLUMN "challenged_accepted" boolean DEFAULT false NOT NULL;

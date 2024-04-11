@@ -1,5 +1,6 @@
 import { relations, sql } from "drizzle-orm";
 import {
+  boolean,
   index,
   integer,
   pgTableCreator,
@@ -124,6 +125,8 @@ export const fights = createTable("fights", {
   challengedId: text("challenged_id")
     .references(() => users.id)
     .notNull(),
+  authorAccepted: boolean("author_accepted").default(true).notNull(),
+  challengedAccepted: boolean("challenged_accepted").default(false).notNull(),
 });
 
 // Define the "subscriptions" table

@@ -1,9 +1,10 @@
 import "~/styles/globals.css";
-
+import { Toaster } from "~/components/ui/toaster";
 import { Inter } from "next/font/google";
 import Navbar from "~/components/Navbar";
 import Footer from "~/components/Footer";
-import SessionWrapper from "~/components/SessionWrapper";
+import SessionWrapper from "~/utils/SessionWrapper";
+import TanstackProvider from "~/utils/Provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,11 +26,14 @@ export default function RootLayout({
     <SessionWrapper>
       <html lang="en">
         <body className={`font-sans ${inter.variable}`}>
-          <div className="align-self flex min-h-[100dvh] flex-col justify-between">
-            <Navbar />
-            {children}
-            <Footer />
-          </div>
+          <TanstackProvider>
+            <div className="align-self flex min-h-[100dvh] flex-col justify-between">
+              <Navbar />
+              {children}
+              <Toaster />
+              <Footer />
+            </div>
+          </TanstackProvider>
         </body>
       </html>
     </SessionWrapper>

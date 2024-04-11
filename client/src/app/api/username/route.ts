@@ -29,7 +29,12 @@ export async function PUT(request: Request, response: Response) {
       .set({ username: username })
       .where(eq(users.id, session.user.id))
       .returning({ username: users.username });
-    return NextResponse.json(x);
+    return NextResponse.json(
+      {
+        username: x[0]?.username,
+      },
+      { status: 200 },
+    );
   } catch (error) {
     console.error("Error updating schema:", error);
     return NextResponse.json(
