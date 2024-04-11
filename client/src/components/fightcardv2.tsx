@@ -46,7 +46,7 @@ export function Fightcardv2({ fight }: { fight: Fight }) {
           <div className="flex flex-col">
             <CardTitle>{title}</CardTitle>
             <CardDescription>
-              {description || "No description provided."}
+              {description ?? "No description provided."}
             </CardDescription>
           </div>
         </div>
@@ -58,7 +58,7 @@ export function Fightcardv2({ fight }: { fight: Fight }) {
               alt="Image"
               className="rounded-full"
               height={80}
-              src={challengedUser.image || "/placeholder.svg"}
+              src={challengedUser.image ?? "/placeholder.svg"}
               style={{
                 aspectRatio: "80/80",
                 objectFit: "cover",
@@ -78,7 +78,7 @@ export function Fightcardv2({ fight }: { fight: Fight }) {
               alt="Image"
               className="rounded-full"
               height={80}
-              src={author.image || "/placeholder.svg"}
+              src={author.image ?? "/placeholder.svg"}
               style={{
                 aspectRatio: "80/80",
                 objectFit: "cover",

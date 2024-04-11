@@ -25,7 +25,7 @@ const FightCard = ({ fight }: { fight: Fight }) => {
               alt="Author"
               className="rounded-full"
               height="80"
-              src={author.image || "/placeholder.svg"}
+              src={author.image ?? "/placeholder.svg"}
               style={{ aspectRatio: "80/80", objectFit: "cover" }}
               width="80"
             />
@@ -39,7 +39,7 @@ const FightCard = ({ fight }: { fight: Fight }) => {
               alt="Challenged User"
               className="rounded-full"
               height="80"
-              src={challengedUser.image || "/placeholder.svg"}
+              src={challengedUser.image ?? "/placeholder.svg"}
               style={{ aspectRatio: "80/80", objectFit: "cover" }}
               width="80"
             />

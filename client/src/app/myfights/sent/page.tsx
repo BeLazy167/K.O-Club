@@ -10,13 +10,13 @@ const fetchConfirmedFights = async () => {
   if (!response.ok) {
     throw new Error("Failed to fetch confirmed fights");
   }
-  return response.json();
+  return response.json() as Promise<SentFight[]>;
 };
 
 export default function ConfirmedFights() {
   const { data: session } = useSession();
   const {
-    data: fights = [] as SentFight[],
+    data: fights,
     isLoading,
     error,
   } = useQuery({
@@ -44,9 +44,9 @@ export default function ConfirmedFights() {
 
   return (
     <div>
-      <h1>Sent Fights</h1>
+      <h1>Sent</h1>
       <div className="flex flex-col items-center">
-        {fights.map((fight: SentFight) => (
+        {fights?.map((fight: SentFight) => (
           <Fightcardv2 key={fight.id} fight={{ SentFight: fight, author }} />
         ))}
       </div>
