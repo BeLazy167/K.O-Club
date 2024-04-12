@@ -1,14 +1,15 @@
 import { User } from "./user.type";
 
-export interface SentFight {
+export interface RecievedFight {
   id: string;
   title: string;
   description: string | null;
   location: string;
   dateTime: Date;
-  challengedUser: User;
-  author: User;
-  createdAt: Date;
+  authorId: string;
   authorAccepted: boolean;
+  createdAt: Date;
+  challengedId: string;
   challengedAccepted: boolean;
+  author: User;
 }

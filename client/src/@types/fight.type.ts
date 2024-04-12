@@ -8,4 +8,5 @@ export type Fight = {
   createdAt: Date;
   challengedId: string;
   challengedAccepted: boolean;
+  authorAccepted: boolean;
 };

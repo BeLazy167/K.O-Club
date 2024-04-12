@@ -6,7 +6,10 @@ import { authOptions } from "~/server/auth";
 import { fights } from "~/server/db/schema";
 import { users } from "~/server/db/schema";
 
-export async function GET(request: Request) {
+export async function GET(
+  request: Request,
+  { params }: { params: { fightId: string } },
+) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -16,35 +19,25 @@ export async function GET(request: Request) {
   if (!userId) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
-
-  try {
-    const sentFights = await db
-      .select({
-        id: fights.id,
-        title: fights.title,
-        description: fights.description,
-        location: fights.location,
-        dateTime: fights.dateTime,
-        authorAccepted: fights.authorAccepted,
-        challengedAccepted: fights.challengedAccepted,
-        challengedUser: {
-          id: users.id,
-          name: users.name,
-          username: users.username,
-          image: users.image,
-          email: users.email,
-        },
-        createdAt: fights.createdAt,
-      })
-      .from(fights)
-      .leftJoin(users, eq(fights.challengedId, users.id))
-      .where(eq(fights.authorId, userId));
-    //append author details in sent fight object
-    return NextResponse.json(sentFights, { status: 200 });
-  } catch (error) {
-    console.error("Error fetching sent fights:", error);
+  const { fightId } = params;
+  if (!fightId) {
     return NextResponse.json(
-      { message: "Failed to fetch sent fights" },
+      { message: "Fight ID is required" },
+      { status: 400 },
+    );
+  }
+  try {
+    // Update the fight record in the database to mark it as accepted
+    await db
+      .update(fights)
+      .set({ challengedAccepted: true })
+      .where(eq(fights.id, fightId));
+
+    return NextResponse.json({ message: "Fight accepted successfully" });
+  } catch (error) {
+    console.error("Error accepting fight:", error);
+    return NextResponse.json(
+      { error: "An error occurred while accepting the fight" },
       { status: 500 },
     );
   }

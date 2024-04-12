@@ -1,3 +1,123 @@
+// import {
+//   CardTitle,
+//   CardDescription,
+//   CardHeader,
+//   CardContent,
+//   CardFooter,
+//   Card,
+// } from "~/components/ui/card";
+// import { AvatarImage, Avatar } from "~/components/ui/avatar";
+// import { Button } from "~/components/ui/button";
+// import { SentFight } from "~/@types/sentfight.type";
+// import { User } from "~/@types/user.type";
+// import { desc } from "drizzle-orm";
+// import { date } from "drizzle-orm/pg-core";
+// export interface Fight {
+//   SentFight: SentFight;
+//   author: User;
+// }
+// export function Fightcardv2({ fight }: { fight: Fight }) {
+//   const { title, challengedUser, dateTime, location, description } =
+//     fight.SentFight;
+//   const { author } = fight;
+//   const date = new Date(dateTime);
+
+//   const options: Intl.DateTimeFormatOptions = {
+//     timeZone: "America/New_York",
+//     month: "long",
+//     day: "numeric",
+//     year: "numeric",
+//   };
+
+//   const timeOptions: Intl.DateTimeFormatOptions = {
+//     timeZone: "America/New_York",
+//     hour: "numeric",
+//     minute: "numeric",
+//     hour12: true,
+//     timeZoneName: "short",
+//   };
+
+//   const formattedDate = date.toLocaleDateString("en-US", options);
+//   const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
+//   return (
+//     <Card className="mt-4">
+//       <CardHeader>
+//         <div className="flex items-center space-x-4 ">
+//           <div className="flex flex-col">
+//             <CardTitle>{title}</CardTitle>
+//             <CardDescription>
+//               {description ?? "No description provided."}
+//             </CardDescription>
+//           </div>
+//         </div>
+//       </CardHeader>
+//       <CardContent>
+//         <div className="grid grid-cols-2 gap-4">
+//           <div className="flex items-center space-x-4">
+//             <img
+//               alt="Image"
+//               className="rounded-full"
+//               height={80}
+//               src={challengedUser.image ?? "/placeholder.svg"}
+//               style={{
+//                 aspectRatio: "80/80",
+//                 objectFit: "cover",
+//               }}
+//               width={80}
+//             />
+//             <div className="space-y-2">
+//               <h3 className="text-lg font-medium">{challengedUser.name}</h3>
+//               <p className="text-sm text-gray-500">
+//                 @{challengedUser.username}
+//               </p>
+//               <p className="text-sm text-gray-500">{challengedUser.email}</p>
+//             </div>
+//           </div>
+//           <div className="flex items-center space-x-4">
+//             <img
+//               alt="Image"
+//               className="rounded-full"
+//               height={80}
+//               src={author.image ?? "/placeholder.svg"}
+//               style={{
+//                 aspectRatio: "80/80",
+//                 objectFit: "cover",
+//               }}
+//               width={80}
+//             />
+//             <div className="space-y-2">
+//               <h3 className="text-lg font-medium">{author.name}</h3>
+//               <p className="text-sm text-gray-500">@{author.username}</p>
+//               <p className="text-sm text-gray-500">{author.email}</p>
+//             </div>
+//           </div>
+//         </div>
+//         <div className="mt-4 space-y-4">
+//           <div className="flex items-center space-x-2">
+//             <CalendarIcon className="h-4 w-4 flex-shrink-0 text-gray-500" />
+//             <span className="text-sm font-medium">{formattedDate}</span>
+//           </div>
+//           <div className="flex items-center space-x-2">
+//             <ClockIcon className="h-4 w-4 flex-shrink-0 text-gray-500" />
+//             <span className="text-sm font-medium">{formattedTime}</span>
+//           </div>
+//           <div className="flex items-center space-x-2">
+//             <MapPinIcon className="h-4 w-4 flex-shrink-0 text-gray-500" />
+//             <span className="text-sm font-medium">{location}</span>
+//           </div>
+//         </div>
+//       </CardContent>
+//       <CardFooter className="flex justify-end">
+//         <div className="flex items-center space-x-2">
+//           <PendingCircleIcon className="h-4 w-4 text-yellow-500" />
+//           <span className="text-sm font-medium">Pending</span>
+//         </div>
+//         {/* <Button size="sm">View</Button> */}
+//       </CardFooter>
+//     </Card>
+//   );
+// }
+
 import {
   CardTitle,
   CardDescription,
@@ -6,20 +126,42 @@ import {
   CardFooter,
   Card,
 } from "~/components/ui/card";
-import { AvatarImage, Avatar } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { SentFight } from "~/@types/sentfight.type";
 import { User } from "~/@types/user.type";
-import { desc } from "drizzle-orm";
-import { date } from "drizzle-orm/pg-core";
-export interface Fight {
-  SentFight: SentFight;
-  author: User;
+import { RecievedFight } from "~/@types/recieved.type";
+
+export interface SentFightInt {
+  fightData: SentFight;
+  current: User;
+  fightType: string;
 }
-export function Fightcardv2({ fight }: { fight: Fight }) {
-  const { title, challengedUser, dateTime, location, description } =
-    fight.SentFight;
-  const { author } = fight;
+
+export interface RecievedFightInt {
+  fightData: RecievedFight;
+  current: User;
+  fightType: string;
+  acceptFight: (fightId: string) => void;
+}
+
+export function Fightcardv2({
+  fight,
+}: {
+  fight: SentFightInt | RecievedFightInt;
+}) {
+  const {
+    title,
+    description,
+    location,
+    dateTime,
+    authorAccepted,
+    challengedAccepted,
+  } = fight.fightData;
+  const { current } = fight;
+  const challengedUser =
+    "challengedUser" in fight.fightData
+      ? fight.fightData.challengedUser
+      : fight.fightData.author;
   const date = new Date(dateTime);
 
   const options: Intl.DateTimeFormatOptions = {
@@ -39,10 +181,11 @@ export function Fightcardv2({ fight }: { fight: Fight }) {
 
   const formattedDate = date.toLocaleDateString("en-US", options);
   const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
+
   return (
     <Card className="mt-4">
       <CardHeader>
-        <div className="flex items-center space-x-4 ">
+        <div className="flex items-center space-x-4">
           <div className="flex flex-col">
             <CardTitle>{title}</CardTitle>
             <CardDescription>
@@ -53,6 +196,24 @@ export function Fightcardv2({ fight }: { fight: Fight }) {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-4">
+          <div className="flex items-center space-x-4">
+            <img
+              alt="Image"
+              className="rounded-full"
+              height={80}
+              src={current.image ?? "/placeholder.svg"}
+              style={{
+                aspectRatio: "80/80",
+                objectFit: "cover",
+              }}
+              width={80}
+            />
+            <div className="space-y-2">
+              <h3 className="text-lg font-medium">{current.name}</h3>
+              <p className="text-sm text-gray-500">@{current.username}</p>
+              <p className="text-sm text-gray-500">{current.email}</p>
+            </div>
+          </div>
           <div className="flex items-center space-x-4">
             <img
               alt="Image"
@@ -73,24 +234,6 @@ export function Fightcardv2({ fight }: { fight: Fight }) {
               <p className="text-sm text-gray-500">{challengedUser.email}</p>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <img
-              alt="Image"
-              className="rounded-full"
-              height={80}
-              src={author.image ?? "/placeholder.svg"}
-              style={{
-                aspectRatio: "80/80",
-                objectFit: "cover",
-              }}
-              width={80}
-            />
-            <div className="space-y-2">
-              <h3 className="text-lg font-medium">{author.name}</h3>
-              <p className="text-sm text-gray-500">@{author.username}</p>
-              <p className="text-sm text-gray-500">{author.email}</p>
-            </div>
-          </div>
         </div>
         <div className="mt-4 space-y-4">
           <div className="flex items-center space-x-2">
@@ -109,10 +252,37 @@ export function Fightcardv2({ fight }: { fight: Fight }) {
       </CardContent>
       <CardFooter className="flex justify-end">
         <div className="flex items-center space-x-2">
-          <PendingCircleIcon className="h-4 w-4 text-yellow-500" />
-          <span className="text-sm font-medium">Pending</span>
+          {fight.fightType === "sent" ? (
+            challengedAccepted ? (
+              <>
+                <CheckCircleIcon className="h-4 w-4 text-green-500" />
+                <span className="text-sm font-medium">Accepted</span>
+              </>
+            ) : (
+              <>
+                <PendingCircleIcon className="h-4 w-4 text-yellow-500" />
+                <span className="text-sm font-medium">Pending</span>
+              </>
+            )
+          ) : challengedAccepted ? (
+            <>
+              <CheckCircleIcon className="h-4 w-4 text-green-500" />
+              <span className="text-sm font-medium">Accepted</span>
+            </>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                if ("acceptFight" in fight) {
+                  fight.acceptFight(fight.fightData.id);
+                }
+              }}
+            >
+              Accept Fight
+            </Button>
+          )}
         </div>
-        {/* <Button size="sm">View</Button> */}
       </CardFooter>
     </Card>
   );

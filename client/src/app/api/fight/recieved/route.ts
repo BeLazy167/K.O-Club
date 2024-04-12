@@ -1,40 +1,67 @@
-// import { type NextApiRequest, type NextApiResponse } from "next";
-// import { eq } from "drizzle-orm/expressions";
-// import { fights, fightsUsersRelations } from "~/server/db/schema";
-// import { getServerSession } from "next-auth";
-// import { authOptions } from "~/server/auth";
-// import { NextResponse } from "next/server";
-// import { db } from "~/server/db";
+import { NextResponse } from "next/server";
+import { eq } from "drizzle-orm/expressions";
+import { getServerSession } from "next-auth";
+import { db } from "~/server/db";
+import { authOptions } from "~/server/auth";
+import { fights } from "~/server/db/schema";
+import { users } from "~/server/db/schema";
 
-// export default async function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse,
-// ) {
-//   if (req.method === "GET") {
-//     const session = await getServerSession(authOptions);
+export async function GET(request: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
 
-//     if (!session || !session.user) {
-//       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-//     }
-//     const userId = session.user.id;
-//     if (!userId) {
-//       res.status(401).json({ message: "Unauthorized" });
-//       return;
-//     }
+  const userId = session.user.id;
+  if (!userId) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
 
-//     try {
-//       const receivedFights = await db.query.fights.findMany({
-//         where: eq(fights.challengedId, userId),
-//         with: {
-//           authorId: true,
-//         },
-//       });
+  try {
+    const recievedFights = await db
+      .select({
+        id: fights.id,
+        title: fights.title,
+        description: fights.description,
+        location: fights.location,
+        dateTime: fights.dateTime,
+        authorAccepted: fights.authorAccepted,
+        challengedAccepted: fights.challengedAccepted,
+        author: {
+          id: users.id,
+          name: users.name,
+          username: users.username,
+          image: users.image,
+          email: users.email,
+        },
+        createdAt: fights.createdAt,
+      })
+      .from(fights)
+      .leftJoin(users, eq(fights.authorId, users.id))
+      .where(eq(fights.challengedId, userId));
+    //append author details in sent fight object
+    return NextResponse.json(recievedFights, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching sent fights:", error);
+    return NextResponse.json(
+      { message: "Failed to fetch sent fights" },
+      { status: 500 },
+    );
+  }
+}
 
-//       res.status(200).json(receivedFights);
-//     } catch (error) {
-//       res.status(500).json({ message: "Failed to fetch received fights" });
-//     }
-//   } else {
-//     res.status(405).json({ message: "Method not allowed" });
-//   }
-// }
+export async function POST(request: Request) {
+  return NextResponse.json({ message: "Method not allowed" }, { status: 405 });
+}
+
+export async function PUT(request: Request) {
+  return NextResponse.json({ message: "Method not allowed" }, { status: 405 });
+}
+
+export async function DELETE(request: Request) {
+  return NextResponse.json({ message: "Method not allowed" }, { status: 405 });
+}
+
+export async function PATCH(request: Request) {
+  return NextResponse.json({ message: "Method not allowed" }, { status: 405 });
+}
