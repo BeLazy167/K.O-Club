@@ -15,6 +15,7 @@ import { useState } from "react";
 import { debounce } from "~/lib/debounce";
 import { UserSearchResults } from "./UserSearchResult";
 import { User } from "~/@types/user.type";
+import { toast } from "./ui/use-toast";
 
 export function FightForm() {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -88,8 +89,11 @@ export function FightForm() {
       });
 
       if (response.ok) {
-        console.log("Fight invitation created successfully");
         // Reset form fields
+        toast({
+          title: "Fight Request Sent",
+          description: "You have requested a fight with the user",
+        });
         setFormData({
           title: "",
           description: "",

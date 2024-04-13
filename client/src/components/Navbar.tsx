@@ -18,9 +18,15 @@ export default function Navbar() {
         <nav className="ml-auto flex gap-4 sm:gap-6">
           <Link
             className="text-sm font-medium underline-offset-4 hover:underline"
+            href="/fights"
+          >
+            Fights
+          </Link>
+          <Link
+            className="text-sm font-medium underline-offset-4 hover:underline"
             href="/api/auth/signin/google"
           >
-            SignIn
+            Sign In
           </Link>
         </nav>
       </header>
@@ -41,16 +47,17 @@ export default function Navbar() {
         </Link>
         <Link
           className="text-sm font-medium underline-offset-4 hover:underline"
+          href="/myfights"
+        >
+          My Fights
+        </Link>
+        <Link
+          className="text-sm font-medium underline-offset-4 hover:underline"
           href="/dashboard"
         >
           Dashboard
         </Link>
-        <Link
-          className="text-sm font-medium underline-offset-4 hover:underline"
-          href="/create"
-        >
-          Create
-        </Link>
+
         <Link
           className="text-sm font-medium underline-offset-4 hover:underline"
           href="/api/auth/signout/google"

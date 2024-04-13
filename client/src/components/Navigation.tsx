@@ -13,6 +13,7 @@ import {
   navigationMenuTriggerStyle,
 } from "~/components/ui/navigation-menu";
 import { cn } from "~/lib/utils";
+import { Button } from "./ui/button";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -54,26 +55,30 @@ const components: { title: string; href: string; description: string }[] = [
 
 export function NavigationMenuX() {
   return (
-    <NavigationMenu>
+    <NavigationMenu className="flex justify-between">
       <NavigationMenuList>
+        <NavigationMenuItem>
+          <Link href="/myfights/create" legacyBehavior passHref>
+            <Button className="w-36 rounded-full bg-gray-600 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+              Create Fight
+            </Button>
+          </Link>
+        </NavigationMenuItem>
         <NavigationMenuItem>
           <Link href="/myfights/sent" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Sent
+              <Button className="w-36 rounded-full bg-gray-600 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                Sent
+              </Button>
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <Link href="/myfights/recieved" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Recievd
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <Link href="/myfights/confirmed" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Confirmed
+            <NavigationMenuLink>
+              <Button className="w-36 rounded-full bg-gray-600 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                Recieved
+              </Button>
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>

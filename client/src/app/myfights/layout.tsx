@@ -7,6 +7,7 @@ export default function MyFights({ children }: { children: React.ReactNode }) {
   return (
     <div className="mx-auto">
       <NavigationMenuX />
+
       {children}
     </div>
   );
