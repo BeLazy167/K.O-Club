@@ -32,10 +32,6 @@ export const users = createTable("user", {
   username: varchar("username", { length: 255 }),
 });
 
-// Define the relations for the "users" table
-export const usersRelations = relations(users, ({ many }) => ({
-  accounts: many(accounts),
-}));
 export const usersClubRelations = relations(users, ({ many }) => ({
   fights: many(fights),
   subscriptions: many(subscriptions),
@@ -137,9 +133,25 @@ export const subscriptions = createTable("subscriptions", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// Define the relations for the "fights" table
-export const fightsRelations = relations(fights, ({ many }) => ({
+// Define the relations for the "users" table
+export const usersRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+  sessions: many(sessions),
+  fights: many(fights),
   subscriptions: many(subscriptions),
+}));
+
+// Define the relations for the "fights" table
+export const fightsRelations = relations(fights, ({ many, one }) => ({
+  subscriptions: many(subscriptions),
+  author: one(users, {
+    fields: [fights.authorId],
+    references: [users.id],
+  }),
+  challenged: one(users, {
+    fields: [fights.challengedId],
+    references: [users.id],
+  }),
 }));
 
 // Define the relations for the "subscriptions" table
@@ -152,15 +164,4 @@ export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
     fields: [subscriptions.fightId],
     references: [fights.id],
   }),
-}));
-
-// each user can have many fights
-export const usersFightsRelations = relations(users, ({ many }) => ({
-  fights: many(fights),
-}));
-
-//each fight has 2 users
-export const fightsUsersRelations = relations(fights, ({ one }) => ({
-  authorId: one(users),
-  challegedId: one(users),
 }));

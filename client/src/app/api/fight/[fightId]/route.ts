@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm/expressions";
 import { getServerSession } from "next-auth";
 import { db } from "~/server/db";
@@ -6,12 +6,16 @@ import { authOptions } from "~/server/auth";
 import { fights, fightsRelations, users } from "~/server/db/schema";
 import { alias } from "drizzle-orm/pg-core";
 
-export async function GET(request: Request) {
+export async function GET(
+  request: Request,
+  { params }: { params: { fightId: string } },
+) {
+  const { fightId } = params;
   try {
     const author = alias(users, "author");
     const challenged = alias(users, "challenged");
-    const acceptedFights = await db
-      .select({
+    const FightData = await db
+      .selectDistinct({
         id: fights.id,
         title: fights.title,
         description: fights.description,
@@ -36,14 +40,9 @@ export async function GET(request: Request) {
       .from(fights)
       .leftJoin(author, eq(fights.authorId, author.id))
       .leftJoin(challenged, eq(fights.challengedId, challenged.id))
-      .where(
-        and(
-          eq(fights.challengedAccepted, true),
-          eq(fights.authorAccepted, true),
-        ),
-      );
+      .where(eq(fights.id, fightId));
 
-    return NextResponse.json(acceptedFights, { status: 200 });
+    return NextResponse.json(FightData[0], { status: 200 });
   } catch (error) {
     console.error("Error fetching accepted fights:", error);
     return NextResponse.json(

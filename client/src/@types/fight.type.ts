@@ -1,3 +1,5 @@
+import { User } from "./user.type";
+
 export type Fight = {
   id: string;
   title: string;
@@ -10,3 +12,14 @@ export type Fight = {
   challengedAccepted: boolean;
   authorAccepted: boolean;
 };
+
+export interface Challenge {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+  dateTime: string;
+  createdAt: string;
+  author: User;
+  challenged: User;
+}
