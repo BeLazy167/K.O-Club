@@ -1,7 +1,6 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-
+import { useQuery } from "@tanstack/react-query";
 import { Challenge } from "~/@types/fight.type";
 import { MainFightPage } from "~/components/main-fight-page";
 const fetchFightData = async ({ queryKey }: { queryKey: [string, string] }) => {

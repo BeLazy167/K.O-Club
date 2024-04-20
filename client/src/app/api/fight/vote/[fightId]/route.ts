@@ -5,17 +5,7 @@ import { db } from "~/server/db";
 import { authOptions } from "~/server/auth";
 import { fights, fightsRelations, users, votes } from "~/server/db/schema";
 import { alias } from "drizzle-orm/pg-core";
-
-export interface VotingRequest {
-  votedForId: string;
-  votedForUsername: string;
-}
-export interface Vote {
-  fightId: string;
-  userId: string;
-  votedForId: string;
-  votedForUsername: string;
-}
+import { Vote, VotingRequest } from "~/@types/vote.type";
 
 export async function POST(
   request: Request,
@@ -30,7 +20,8 @@ export async function POST(
   }
   const { fightId } = params;
   const userId = session?.user?.id;
-  const { votedForId, votedForUsername } = await request.json();
+  const { votedForId, votedForUsername } =
+    (await request.json()) as VotingRequest;
   const vote: Vote = {
     fightId,
     userId,
@@ -50,6 +41,7 @@ export async function POST(
           },
         });
     });
+    return NextResponse.json(vote);
   } catch (error) {
     console.error("Error fetching accepted fights:", error);
     return NextResponse.json(
@@ -77,7 +69,10 @@ export async function GET(
       .select()
       .from(votes)
       .where(and(eq(votes.userId, userId), eq(votes.fightId, fightId)));
-    return NextResponse.json(vote);
+    if (vote.length === 0) {
+      return NextResponse.json(vote);
+    }
+    return NextResponse.json(vote[0]);
   } catch (error) {
     console.error("Error fetching accepted fights:", error);
     return NextResponse.json(
