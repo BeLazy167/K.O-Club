@@ -133,6 +133,41 @@ export const subscriptions = createTable("subscriptions", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Define the "votes" table
+export const votes = createTable(
+  "votes",
+  {
+    userId: text("user_id")
+      .references(() => users.id)
+      .notNull(),
+    fightId: text("fight_id")
+      .references(() => fights.id)
+      .notNull(),
+    votedForId: text("voted_for_id")
+      .references(() => users.id)
+      .notNull(),
+    votedForUsername: text("voted_for_username").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (vote) => {
+    return {
+      pk: primaryKey({ columns: [vote.userId, vote.fightId] }),
+    };
+  },
+);
+
+// Define the relations for the "votes" table
+export const votesRelations = relations(votes, ({ one }) => ({
+  user: one(users, {
+    fields: [votes.userId],
+    references: [users.id],
+  }),
+  fight: one(fights, {
+    fields: [votes.fightId],
+    references: [fights.id],
+  }),
+}));
+
 // Define the relations for the "users" table
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),

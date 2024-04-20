@@ -1,0 +1,1 @@
+ALTER TABLE "client_votes" ALTER COLUMN "voted_for_id" SET DATA TYPE text;

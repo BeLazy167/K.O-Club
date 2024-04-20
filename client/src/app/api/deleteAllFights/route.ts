@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
-import { drizzle } from "drizzle-orm/node-postgres";
 import { getServerSession } from "next-auth/next";
 import { db } from "~/server/db";
 import { authOptions } from "~/server/auth";
 import { fights } from "~/server/db/schema";
-import { Fight } from "~/@types/fight.type";
 
 export async function GET(request: Request) {
   const session = await getServerSession(authOptions);
