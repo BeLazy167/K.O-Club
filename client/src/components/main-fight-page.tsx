@@ -5,8 +5,23 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { Textarea } from "~/components/ui/textarea";
 import { Challenge } from "~/@types/fight.type";
 import VoteSection from "./vote-section";
+import ChatSection from "./chat-section";
 
-export function MainFightPage({ FightData }: { FightData: Challenge }) {
+export function MainFightPage({
+  FightData,
+  session,
+}: {
+  FightData: Challenge;
+  session: {
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      image: string;
+      username: string;
+    };
+  };
+}) {
   if (!FightData) return <div>Loading...</div>;
   const { title, description, author, challenged, id } = FightData;
   return (
@@ -52,65 +67,11 @@ export function MainFightPage({ FightData }: { FightData: Challenge }) {
         </div>
       </section>
       <VoteSection author={author} challenged={challenged} fightId={id} />
-      <section className="w-full py-12 md:py-24 lg:py-32" id="chat">
-        <div className="mx-auto max-w-4xl overflow-hidden rounded-xl bg-gray-100 p-4 shadow dark:bg-gray-800">
-          <ScrollArea className="h-96">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-start gap-2">
-                <Avatar>
-                  <AvatarImage alt="User" src="/placeholder-avatar.jpg" />
-                  <AvatarFallback>JP</AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <p className="font-medium">John Doe</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    2 minutes ago
-                  </p>
-                  <p>Hey, how is it going?</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <Avatar>
-                  <AvatarImage alt="User" src="/placeholder-avatar.jpg" />
-                  <AvatarFallback>JS</AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <p className="font-medium">Jane Smith</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    1 minute ago
-                  </p>
-                  <p>Not bad, just getting ready for the big fight tonight!</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <Avatar>
-                  <AvatarImage alt="User" src="/placeholder-avatar.jpg" />
-                  <AvatarFallback>JP</AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <p className="font-medium">John Doe</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Just now
-                  </p>
-                  <p>
-                    Yeah, it is going to be an epic match! Who are you rooting
-                    for?
-                  </p>
-                </div>
-              </div>
-            </div>
-          </ScrollArea>
-          <div className="mt-4 flex items-center gap-2">
-            <Textarea
-              className="h-16 flex-1"
-              placeholder="Type your message here..."
-            />
-            <Button>
-              <SendIcon className="h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      </section>
+      <ChatSection
+        fightId={id}
+        userId={session.user.id}
+        username={session.user.username}
+      />
     </div>
   );
 }

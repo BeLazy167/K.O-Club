@@ -2,3 +2,7 @@
 ./client/*.env
 ./client/.next/
 ./client.swc/
+
+# Server
+./server/node_modules
+./server/*.env

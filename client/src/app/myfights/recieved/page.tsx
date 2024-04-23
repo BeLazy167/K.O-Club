@@ -3,9 +3,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { RecievedFight } from "~/@types/recieved.type";
+import Loading from "~/app/loading";
 import FightCard from "~/components/fight-card";
 import { Fightcardv2 } from "~/components/fightcardv2";
 import { toast } from "~/components/ui/use-toast";
+import { Unauthorized } from "~/components/unauthorized";
 import { queryClient } from "~/lib/queryClientSingleton";
 const fetchRecievedFights = async () => {
   const response = await fetch("/api/fight/recieved");
@@ -48,10 +50,10 @@ export default function ConfirmedFights() {
     },
   });
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
   if (!session) {
-    return <div>Unauthorized</div>;
+    return <Unauthorized />;
   }
   if (error) {
     return <div>Error: {error.message}</div>;
@@ -66,8 +68,14 @@ export default function ConfirmedFights() {
   const fightType = "recieved";
 
   return (
-    <div>
-      <h1>Recievd Request</h1>
+    <div className="mt-4">
+      {fights?.length !== 0 ? (
+        <h1 className="mb-8 text-center text-4xl font-bold">
+          Received Requests
+        </h1>
+      ) : (
+        <h1 className="mb-8 text-center text-4xl font-bold">No Requests</h1>
+      )}
       <div className="flex flex-col-reverse items-center">
         {fights?.map((fight: RecievedFight) => (
           <Fightcardv2

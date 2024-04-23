@@ -1,7 +1,9 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
+import { Suspense } from "react";
 import { Challenge } from "~/@types/fight.type";
 import { FightCard } from "~/components/main-fight-card";
+import Loading from "../loading";
 async function fetchAllFights() {
   const response = await fetch("/api/allFights");
   if (!response.ok) {
@@ -20,7 +22,7 @@ export default function Page() {
     queryFn: fetchAllFights,
   });
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (

@@ -91,7 +91,7 @@ export default function VoteSection({
     },
   });
   if (!votes) {
-    return <>Loading</>;
+    return <>Loading Votes!</>;
   }
   const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();

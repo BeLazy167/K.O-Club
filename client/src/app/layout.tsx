@@ -5,6 +5,9 @@ import Navbar from "~/components/Navbar";
 import Footer from "~/components/Footer";
 import SessionWrapper from "~/utils/SessionWrapper";
 import TanstackProvider from "~/utils/Provider";
+import { SocketContextProvider } from "~/utils/SocketContext";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,14 +30,16 @@ export default function RootLayout({
     <SessionWrapper>
       <html lang="en">
         <body className={`font-sans ${inter.variable}`}>
-          <TanstackProvider>
-            <div className="flex min-h-[100dvh] flex-col justify-between">
-              <Navbar />
-              {children}
-              <Toaster />
-              <Footer />
-            </div>
-          </TanstackProvider>
+          <SocketContextProvider>
+            <TanstackProvider>
+              <div className="flex min-h-[100dvh] flex-col justify-between">
+                <Navbar />
+                <Suspense fallback={<Loading />}>{children}</Suspense>
+                <Toaster />
+                <Footer />
+              </div>
+            </TanstackProvider>
+          </SocketContextProvider>
         </body>
       </html>
     </SessionWrapper>

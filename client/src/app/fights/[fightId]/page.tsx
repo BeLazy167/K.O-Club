@@ -3,6 +3,8 @@ import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { Challenge } from "~/@types/fight.type";
 import { MainFightPage } from "~/components/main-fight-page";
+import { Unauthorized } from "~/components/unauthorized";
+import Loading from "~/app/loading";
 const fetchFightData = async ({ queryKey }: { queryKey: [string, string] }) => {
   const [, fightId] = queryKey;
   const response = await fetch(`/api/fight/${fightId}`);
@@ -26,15 +28,29 @@ const FightPage = ({
     queryFn: fetchFightData,
     enabled: !!session,
   });
-  if (!FightData || isLoading) {
-    return <div>Loading...</div>;
-  }
   if (!session) {
-    return <div>Unauthorized</div>;
+    return <Unauthorized />;
   }
+  if (!FightData || isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div>
-      <MainFightPage FightData={FightData} />
+      <MainFightPage
+        FightData={FightData}
+        session={
+          session as {
+            user: {
+              id: string;
+              name: string;
+              email: string;
+              image: string;
+              username: string;
+            };
+          }
+        }
+      />
     </div>
   );
 };

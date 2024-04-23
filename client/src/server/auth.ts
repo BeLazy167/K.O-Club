@@ -10,6 +10,7 @@ import { env } from "~/env";
 import { db } from "~/server/db";
 import { createTable } from "~/server/db/schema";
 import { returnUsername } from "./db/helper/Username";
+import { redirect } from "next/dist/server/api-utils";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -37,9 +38,13 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  pages: {
+    newUser: "/dashboard",
+  },
   callbacks: {
     session: async ({ session, user }) => {
       const username = await returnUsername(user.id);
+
       return {
         ...session,
         user: {
@@ -48,6 +53,13 @@ export const authOptions: NextAuthOptions = {
           username: username as string | null,
         },
       };
+    },
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
     },
   },
 

@@ -3,8 +3,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { SentFight } from "~/@types/sentfight.type";
+import Loading from "~/app/loading";
 import FightCard from "~/components/fight-card";
 import { Fightcardv2 } from "~/components/fightcardv2";
+import { Unauthorized } from "~/components/unauthorized";
 const fetchSentFights = async () => {
   const response = await fetch("/api/fight/sent");
   if (!response.ok) {
@@ -24,13 +26,13 @@ export default function ConfirmedFights() {
     queryFn: fetchSentFights,
     enabled: !!session,
   });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
   if (!session) {
-    return <div>Unauthorized</div>;
+    return <Unauthorized />;
   }
+  if (isLoading) {
+    return <Loading />;
+  }
+
   if (error) {
     return <div>Error: {error.message}</div>;
   }
@@ -43,8 +45,12 @@ export default function ConfirmedFights() {
   };
   const fightType = "sent";
   return (
-    <div>
-      <h1>Sent</h1>
+    <div className="mt-4">
+      {fights?.length !== 0 ? (
+        <h1 className="mb-8 text-center text-4xl font-bold">Sent Requests</h1>
+      ) : (
+        <h1 className="mb-8 text-center text-4xl font-bold">No Requests</h1>
+      )}
       <div className="flex flex-col-reverse items-center">
         {fights?.map((fight: SentFight) => (
           <Fightcardv2
