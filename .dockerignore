@@ -1,0 +1,35 @@
+# Ignore Node.js dependencies
+node_modules
+npm-debug.log
+
+# Ignore build artifacts
+client/.next
+client/out
+client/.env
+client/.env.example
+
+# Ignore development files
+client/.eslintrc.cjs
+client/.gitignore
+client/prettier.config.js
+client/tsconfig.json
+
+# Ignore version control files
+.git
+.gitignore
+
+# Ignore editor files
+.vscode
+.idea
+
+# Ignore miscellaneous files
+Dockerfile
+.dockerignore
+README.md
+
+# Ignore server files
+server/node_modules
+server/npm-debug.log
+server/.env
+server/.env.example
+server/.gitignore
