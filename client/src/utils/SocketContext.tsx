@@ -2,6 +2,7 @@
 import { useSession } from "next-auth/react";
 import { createContext, useContext, useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
+import { env } from "~/env";
 
 export const SocketContext = createContext<Socket | null>(null);
 
@@ -19,7 +20,7 @@ export const SocketContextProvider = ({
 
   useEffect(() => {
     if (session) {
-      const socket = io("http://localhost:5000", {
+      const socket = io(env.SOCKET_URL, {
         query: { userId: session.user.id },
       });
       setSocket(socket);

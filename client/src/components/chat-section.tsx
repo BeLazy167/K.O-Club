@@ -8,6 +8,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Message } from "~/@types/message.type";
 import Loading from "~/app/loading";
+import { env } from "~/env";
 
 async function fetchFightMessages({
   queryKey,
@@ -15,9 +16,9 @@ async function fetchFightMessages({
   queryKey: [string, string];
 }) {
   const [, fightId] = queryKey;
-  return (await fetch(
-    `http://localhost:5000/api/fights/${fightId}/messages`,
-  ).then((res) => res.json())) as Promise<Message[]>;
+  return (await fetch(`${env.SOCKET_URL}/api/fights/${fightId}/messages`).then(
+    (res) => res.json(),
+  )) as Promise<Message[]>;
 }
 
 function sendMessage({
@@ -31,7 +32,7 @@ function sendMessage({
   userId: string;
   username: string;
 }) {
-  return fetch(`http://localhost:5000/api/fights/${fightId}/messages`, {
+  return fetch(`${env.SOCKET_URL}/api/fights/${fightId}/messages`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
