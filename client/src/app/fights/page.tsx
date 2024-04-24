@@ -20,6 +20,8 @@ export default function Page() {
   } = useQuery({
     queryKey: ["allFights"],
     queryFn: fetchAllFights,
+    refetchOnWindowFocus: true,
+    refetchInterval: 4000,
   });
   if (isLoading) {
     return <Loading />;
