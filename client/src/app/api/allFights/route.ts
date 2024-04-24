@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { and, eq } from "drizzle-orm/expressions";
+import { and, desc, eq } from "drizzle-orm/expressions";
 import { getServerSession } from "next-auth";
 import { db } from "~/server/db";
 import { authOptions } from "~/server/auth";
 import { fights, fightsRelations, users } from "~/server/db/schema";
 import { alias } from "drizzle-orm/pg-core";
-
+export const fetchCache = "force-no-store";
 export async function GET(request: Request) {
   try {
     const author = alias(users, "author");
@@ -41,8 +41,8 @@ export async function GET(request: Request) {
           eq(fights.challengedAccepted, true),
           eq(fights.authorAccepted, true),
         ),
-      );
-
+      )
+      .orderBy(desc(fights.createdAt));
     return NextResponse.json(acceptedFights, { status: 200 });
   } catch (error) {
     console.error("Error fetching accepted fights:", error);

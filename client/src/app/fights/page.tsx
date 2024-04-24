@@ -1,11 +1,12 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import { Suspense } from "react";
 import { Challenge } from "~/@types/fight.type";
 import { FightCard } from "~/components/main-fight-card";
 import Loading from "../loading";
 async function fetchAllFights() {
-  const response = await fetch("/api/allFights");
+  const response = await fetch("/api/allFights", {
+    cache: "no-store", // vercel cache-busting
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch fights");
   }
@@ -21,14 +22,13 @@ export default function Page() {
     queryKey: ["allFights"],
     queryFn: fetchAllFights,
     refetchOnWindowFocus: true,
-    refetchInterval: 4000,
   });
   if (isLoading) {
     return <Loading />;
   }
 
   return (
-    <div>
+    <div className="flex-row-reverse">
       {challenges?.map((challenge: Challenge) => {
         return <FightCard key={challenge.id} challenge={challenge} />;
       })}
