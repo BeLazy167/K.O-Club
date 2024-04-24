@@ -12,7 +12,7 @@ const app = express({});
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: process.env.CLIENT_URL,
         methods: ["GET", "POST"],
     },
 });
@@ -20,7 +20,7 @@ const io = new Server(server, {
 // Middleware
 app.use(
     cors({
-        origin: "http://localhost:3000",
+        origin: process.env.CLIENT_URL,
         credentials: true,
     })
 );
@@ -171,4 +171,8 @@ io.on("connection", (socket) => {
 const port = process.env.PORT || 5000;
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
+});
+
+app.get("/", (req, res) => {
+    res.send("Hello World");
 });
