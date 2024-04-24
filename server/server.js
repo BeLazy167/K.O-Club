@@ -8,11 +8,13 @@ import cors from "cors";
 import env from "dotenv";
 env.config();
 // Create an instance of the Express application
+console.log(process.env.MONGODB_URI, "MONGODB_URI"); //danger
+console.log(process.env.CLIENT_URL, "CLIENT_URL"); //danger
 const app = express({});
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: process.env.CLIENT_URL,
         methods: ["GET", "POST"],
     },
 });
@@ -20,7 +22,7 @@ const io = new Server(server, {
 // Middleware
 app.use(
     cors({
-        origin: "http://localhost:3000",
+        origin: process.env.CLIENT_URL,
         credentials: true,
     })
 );

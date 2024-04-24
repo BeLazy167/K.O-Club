@@ -18,6 +18,7 @@ export const env = createEnv({
     NEXTAUTH_URL: z.string().url().default("http://localhost:3000"),
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
+    SOCKET_URL: z.string().url(),
   },
   /**
    * Specify your client-side environment variables schema here. This way you can ensure the app
@@ -32,6 +33,7 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    SOCKET_URL: process.env.SOCKET_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
