@@ -6,6 +6,7 @@ import { Vote, VotingRequest } from "~/@types/vote.type";
 import { queryClient } from "~/lib/queryClientSingleton";
 import { useToast } from "./ui/use-toast";
 import { VotingVisuals } from "./voting-visuals";
+import Loading from "~/app/loading";
 
 //used to fetch the personal vote
 const fetchPersonalVote = async ({
@@ -65,6 +66,7 @@ export default function VoteSection({
   const { data: personalVote, isLoading: isPersonalVoteLoading } = useQuery({
     queryKey: ["personalVote", fightId],
     queryFn: fetchPersonalVote,
+    refetchOnWindowFocus: false,
   });
 
   const { data: votes, isLoading: isVotesLoading } = useQuery({
@@ -91,7 +93,7 @@ export default function VoteSection({
     },
   });
   if (!votes) {
-    return <>Loading Votes!</>;
+    return <Loading />;
   }
   const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
