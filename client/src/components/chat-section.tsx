@@ -58,6 +58,7 @@ export default function ChatSection({
   } = useQuery({
     queryKey: ["fightMessages", fightId],
     queryFn: fetchFightMessages,
+    refetchOnWindowFocus: false,
   });
 
   const messages = useFightMessages({ fightId, initialMessages });
