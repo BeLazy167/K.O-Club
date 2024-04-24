@@ -16,7 +16,7 @@ async function fetchFightMessages({
   queryKey: [string, string];
 }) {
   const [, fightId] = queryKey;
-  return (await fetch(`${env.SOCKET_URL}/api/fights/${fightId}/messages`).then(
+  return (await fetch(`${env.NEXT_PUBLIC_SOCKET_URL}/api/fights/${fightId}/messages`).then(
     (res) => res.json(),
   )) as Promise<Message[]>;
 }
@@ -32,7 +32,7 @@ function sendMessage({
   userId: string;
   username: string;
 }) {
-  return fetch(`${env.SOCKET_URL}/api/fights/${fightId}/messages`, {
+  return fetch(`${env.NEXT_PUBLIC_SOCKET_URL}/api/fights/${fightId}/messages`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

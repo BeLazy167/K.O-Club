@@ -20,7 +20,7 @@ export const SocketContextProvider = ({
 
   useEffect(() => {
     if (session) {
-      const socket = io(env.SOCKET_URL, {
+      const socket = io(env.NEXT_PUBLIC_SOCKET_URL, {
         query: { userId: session.user.id },
       });
       setSocket(socket);

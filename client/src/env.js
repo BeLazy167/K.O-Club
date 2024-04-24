@@ -14,10 +14,11 @@ export const env = createEnv({
     NEXTAUTH_URL: z.string().url().default("http://localhost:3000"),
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
-    SOCKET_URL: z.string().url(),
   },
 
-  client: {},
+  client: {
+    NEXT_PUBLIC_SOCKET_URL: z.string().url(),
+  },
 
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
@@ -26,7 +27,7 @@ export const env = createEnv({
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    SOCKET_URL: process.env.SOCKET_URL,
+    NEXT_PUBLIC_SOCKET_URL: process.env.NEXT_PUBLIC_SOCKET_URL,
   },
 
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
