@@ -5,8 +5,9 @@ import { db } from "~/server/db";
 import { authOptions } from "~/server/auth";
 import { fights, fightsRelations, users } from "~/server/db/schema";
 import { alias } from "drizzle-orm/pg-core";
-export const fetchCache = "force-no-store";
+import { unstable_noStore as no_store } from "next/cache";
 export async function GET(request: Request) {
+  no_store();
   try {
     const author = alias(users, "author");
     const challenged = alias(users, "challenged");
