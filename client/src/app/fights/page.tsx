@@ -1,4 +1,5 @@
 "use client";
+export const fetchCache = "force-no-store";
 import { useQuery } from "@tanstack/react-query";
 import { Challenge } from "~/@types/fight.type";
 import { FightCard } from "~/components/main-fight-card";
@@ -6,6 +7,9 @@ import Loading from "../loading";
 async function fetchAllFights() {
   const response = await fetch("/api/allFights", {
     cache: "no-store", // vercel cache-busting
+    next: {
+      revalidate: 1,
+    },
   });
   if (!response.ok) {
     throw new Error("Failed to fetch fights");
