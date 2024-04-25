@@ -1,30 +1,23 @@
+// VoteSection.tsx
+"use client";
 import { User } from "~/@types/user.type";
 import { Button } from "./ui/button";
-
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Vote, VotingRequest } from "~/@types/vote.type";
-import { queryClient } from "~/lib/queryClientSingleton";
 import { useToast } from "./ui/use-toast";
 import { VotingVisuals } from "./voting-visuals";
 import Loading from "~/app/loading";
 
-//used to fetch the personal vote
-const fetchPersonalVote = async ({
-  queryKey,
-}: {
-  queryKey: [string, string];
-}) => {
-  const [_, fightId] = queryKey;
+const fetchPersonalVote = async (fightId: string) => {
   const response = await fetch(`/api/fight/vote/${fightId}`, {
     method: "GET",
   });
   if (!response.ok) {
     throw new Error("Failed to fetch personal vote data");
   }
-
   return response.json() as Promise<Vote>;
 };
-//used to/for mutate the vote
+
 const voteFight = async (data: VotingRequest, fightId: string) => {
   const response = await fetch(`/api/fight/vote/${fightId}`, {
     method: "POST",
@@ -36,20 +29,16 @@ const voteFight = async (data: VotingRequest, fightId: string) => {
   if (!response.ok) {
     throw new Error("Failed to vote for the fight");
   }
-
   return response.json() as Promise<Vote>;
 };
 
-//used to get all the votes to count the votes
-const allVotes = async ({ queryKey }: { queryKey: [string, string] }) => {
-  const [_, fightId] = queryKey;
+const allVotes = async (fightId: string) => {
   const response = await fetch(`/api/fight/vote/${fightId}/all`, {
     method: "GET",
   });
   if (!response.ok) {
     throw new Error("Failed to fetch vote data");
   }
-
   return response.json() as Promise<Vote[]>;
 };
 
@@ -63,38 +52,43 @@ export default function VoteSection({
   fightId: string;
 }) {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+
   const { data: personalVote, isLoading: isPersonalVoteLoading } = useQuery({
     queryKey: ["personalVote", fightId],
-    queryFn: fetchPersonalVote,
+    queryFn: () => fetchPersonalVote(fightId),
     refetchOnWindowFocus: false,
   });
 
   const { data: votes, isLoading: isVotesLoading } = useQuery({
     queryKey: ["votes", fightId],
-    queryFn: allVotes,
+    queryFn: () => allVotes(fightId),
+    refetchOnWindowFocus: true,
+    refetchInterval: 1000,
   });
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending: isMutating } = useMutation({
     mutationFn: (data: VotingRequest) => voteFight(data, fightId),
-
     onSuccess: async (data) => {
-      // Refetch the data
       await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === "votes",
         queryKey: ["votes", fightId],
       });
       await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === "personalVote",
         queryKey: ["personalVote", fightId],
       });
-
       toast({
         title: "Vote submitted",
         description: `You voted for ${data?.votedForUsername}`,
       });
     },
   });
-  if (!votes) {
+
+  if (isPersonalVoteLoading || isVotesLoading) {
     return <Loading />;
   }
+
   const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const selected = event.currentTarget.value;
@@ -110,7 +104,6 @@ export default function VoteSection({
     toast({
       title: "Submitting vote...",
       description: "Please wait a moment",
-
       duration: 5000,
     });
     try {
@@ -150,7 +143,7 @@ export default function VoteSection({
                 variant="ghost"
                 value={"author"}
                 onClick={handleClick}
-                disabled={isPersonalVoteLoading || isVotesLoading || isPending}
+                disabled={isPersonalVoteLoading || isVotesLoading || isMutating}
               >
                 <UserIcon className="mr-2 h-4 w-4" />
                 {author.name} aka {author.username}
@@ -164,7 +157,7 @@ export default function VoteSection({
                 variant="ghost"
                 value={"challenged"}
                 onClick={handleClick}
-                disabled={isPersonalVoteLoading || isVotesLoading || isPending}
+                disabled={isPersonalVoteLoading || isVotesLoading || isMutating}
               >
                 <UserIcon className="mr-2 h-4 w-4" />
                 {challenged.name} aka {challenged.username}
@@ -172,7 +165,7 @@ export default function VoteSection({
             </div>
           </div>
           <VotingVisuals
-            votes={votes}
+            votes={votes ?? []}
             author={author}
             challenged={challenged}
           />
