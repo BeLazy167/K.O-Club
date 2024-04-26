@@ -75,6 +75,7 @@ Before proceeding with the setup, ensure that you have the following installed o
 
 1. **Create a new PostgreSQL database:**
    Create a new PostgreSQL database for the client-side application.
+   For a neondb database follow the guide: [NeonDB Setup Guide](neon.md)
 
 2. **Update the database connection URL:**
    Update the `DATABASE_URL` environment variable in the client's `.env` file with the appropriate PostgreSQL connection URL.
@@ -83,6 +84,7 @@ Before proceeding with the setup, ensure that you have the following installed o
 
 1. **Create a new MongoDB database:**
    Create a new MongoDB database for the server-side application.
+   [MongoDB Setup Guide](mongo.md)
 
 2. **Update the database connection URL:**
    Update the `MONGODB_URI` environment variable in the server's `.env` file with the appropriate MongoDB connection URL.
