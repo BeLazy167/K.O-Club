@@ -11,9 +11,13 @@ export async function GET(
   { params }: { params: { fightId: string } },
 ) {
   const { fightId } = params;
+
   try {
+    // Create aliases for the 'users' table to differentiate between the author and the challenged user
     const author = alias(users, "author");
     const challenged = alias(users, "challenged");
+
+    // Fetch the fight data along with the author and challenged user details
     const FightData = await db
       .selectDistinct({
         id: fights.id,
@@ -42,9 +46,11 @@ export async function GET(
       .leftJoin(challenged, eq(fights.challengedId, challenged.id))
       .where(eq(fights.id, fightId));
 
+    // Return the first fight data object as a JSON response with a status code of 200
     return NextResponse.json(FightData[0], { status: 200 });
   } catch (error) {
     console.error("Error fetching accepted fights:", error);
+    // Return an error message as a JSON response with a status code of 500
     return NextResponse.json(
       { message: "Failed to fetch accepted fights" },
       { status: 500 },

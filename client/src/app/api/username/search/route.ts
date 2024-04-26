@@ -19,15 +19,17 @@ export async function POST(request: Request) {
   }
 }
 
+// Function to search users based on the provided query
 async function searchUsers(query: string | null): Promise<User[]> {
-  //   const cacheKey = `userSearch:${query}`;
+  // If the query is null, return an empty array
   if (!query) {
     return [];
   }
+
+  // Perform a case-insensitive search for usernames that contain the query string
   const results = await db
     .select()
     .from(users)
-    // .where(sql`to_tsvector(username) @@ to_tsquery(${query})`) // This is the full-text search query
     .where(sql`username ilike ${`%${query}%`}`)
     .limit(10);
 

@@ -7,6 +7,7 @@ import { fights, fightsRelations, users, votes } from "~/server/db/schema";
 import { alias } from "drizzle-orm/pg-core";
 import { Vote, VotingRequest } from "~/@types/vote.type";
 
+// Handler for the POST request
 export async function POST(
   request: Request,
   { params }: { params: { fightId: string } },
@@ -51,6 +52,7 @@ export async function POST(
   }
 }
 
+// Handler for the GET request
 export async function GET(
   request: NextRequest,
   { params }: { params: { fightId: string } },

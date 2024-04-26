@@ -17,22 +17,33 @@ export async function GET(
   request: Request,
   { params }: { params: { fightId: string } },
 ) {
+  // Get the server session using the authOptions
   const session = await getServerSession(authOptions);
+
+  // Check if the session or user is not available, indicating unauthorized access
   if (!session || !session.user) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
+  // Get the user ID from the session
   const userId = session.user.id;
+
+  // Check if the user ID is not available, indicating unauthorized access
   if (!userId) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
+
+  // Get the fightId from the params object
   const { fightId } = params;
+
+  // Check if the fightId is not available, indicating a bad request
   if (!fightId) {
     return NextResponse.json(
       { message: "Fight ID is required" },
       { status: 400 },
     );
   }
+
   try {
     // Update the fight record in the database to mark it as accepted
     await db
