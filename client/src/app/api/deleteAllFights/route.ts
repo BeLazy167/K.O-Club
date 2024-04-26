@@ -1,3 +1,4 @@
+// Route: /api/deleteAllFights
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { db } from "~/server/db";
@@ -14,6 +15,7 @@ export async function GET(request: Request) {
   }
   try {
     // Delete all fights from the database
+    //eslint-disable-next-line
     await db.delete(fights);
     // Return success response with a message
     return NextResponse.json(

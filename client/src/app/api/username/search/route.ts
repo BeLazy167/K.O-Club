@@ -1,3 +1,4 @@
+// Route: /api/username/search
 import { NextResponse } from "next/server";
 import { eq, sql } from "drizzle-orm";
 import { User } from "next-auth";

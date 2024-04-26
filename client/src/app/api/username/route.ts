@@ -1,3 +1,4 @@
+// Route: /api/username/route.ts
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
@@ -5,7 +6,6 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "~/server/auth";
 import { eq } from "drizzle-orm/sql";
 
-// app/api/username/route.ts
 
 // Handler function for the PUT request
 export async function PUT(request: Request, response: Response) {

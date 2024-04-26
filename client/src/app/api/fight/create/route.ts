@@ -1,3 +1,4 @@
+//Route /api/fight/create
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { db } from "~/server/db";

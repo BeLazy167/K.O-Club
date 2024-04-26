@@ -18,17 +18,15 @@ export function UserOption({ user, onSelect }: UserOptionProps) {
           alt="Avatar"
           className="aspect-[1/1]"
           height="40"
-          src={user.image ?? "/placeholder.svg"} // Display the user's image if available, otherwise display a placeholder image
+          src={user.image ?? "/placeholder.svg"}
           width="40"
         />
       </div>
       <div className="ml-4 grid gap-0.5 text-xs">
-        <div className="font-medium">{user.name}</div> // Display the user's
-        name
+        <div className="font-medium">{user.name}</div>
         <div className="text-gray-500 dark:text-gray-400">
           @{user.username}
         </div>{" "}
-        // Display the user's username
       </div>
     </div>
   );

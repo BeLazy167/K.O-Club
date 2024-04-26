@@ -1,3 +1,5 @@
+// Route : /api/allFights
+
 import { NextResponse } from "next/server";
 import { and, desc, eq } from "drizzle-orm/expressions";
 import { getServerSession } from "next-auth";

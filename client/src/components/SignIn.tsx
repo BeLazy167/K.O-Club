@@ -8,12 +8,11 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false);
 
   const handleSignIn = async () => {
-    // Sign in with the next-auth signIn method
     try {
       setLoading(true);
       await signIn("google", {
-        callbackUrl: `${window.location.origin}/dashboard`, // Set the callback URL to redirect after successful sign-in
-        redirect: false, // Disable automatic redirect after sign-in
+        callbackUrl: `${window.location.origin}/dashboard`,
+        redirect: false,
       });
     } catch (e) {
       console.error(e);
@@ -23,8 +22,7 @@ export default function SignIn() {
   };
   return (
     <div>
-      <Button onClick={handleSignIn}>Sign In</Button> // Render a button that
-      triggers the handleSignIn function on click
+      <Button onClick={handleSignIn}>Sign In</Button>
     </div>
   );
 }
