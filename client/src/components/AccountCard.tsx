@@ -12,7 +12,7 @@ import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "~/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
 export interface apires {
@@ -74,6 +74,17 @@ export function AccountCard() {
     e.preventDefault();
     updateUsernameMutation(username);
   };
+
+  // ask user to set username if not set
+  useEffect(() => {
+    if (!session?.user.username) {
+      toast({
+        title: "Username Required",
+        description: "Please set a username.",
+        variant: "destructive",
+      });
+    }
+  }, [session?.user.username]);
 
   if (session) {
     const { name, email, image, username: sessionUsername, id } = session.user;
