@@ -35,18 +35,26 @@ export function FightCard({ challenge }: FightCardProps) {
 
   const formattedDate = date.toLocaleDateString("en-US", options);
   const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
-  //@typescript-eslint/no-non-null-assertion
+
+  // Get the author's image or use an empty string if it doesn't exist
   const authorImage = author.image ?? "";
+
+  // Get the challenged user's image or use an empty string if it doesn't exist
   const challengedImage = challenged.image ?? "";
+
   return (
     <div className="mx-auto w-full max-w-2xl">
+      {/* Link to the fight details page */}
       <Link className="px-4 py-12" href={`/fights/${id}`}>
         <Card className="rounded-lg bg-gray-100 p-4 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700">
           <div className="flex flex-col items-center space-y-2">
+            {/* Fight title */}
             <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
             <div className="flex items-center space-x-2">
+              {/* Hover card for the author */}
               <HoverCard>
                 <HoverCardTrigger asChild>
+                  {/* Author's avatar */}
                   <Avatar>
                     <AvatarImage src={authorImage} />
                     <AvatarFallback>{author.username}</AvatarFallback>
@@ -54,12 +62,15 @@ export function FightCard({ challenge }: FightCardProps) {
                 </HoverCardTrigger>
                 <HoverCardContent>
                   <div className="flex items-center space-x-2">
+                    {/* Author's avatar in the hover card */}
                     <Avatar>
                       <AvatarImage src={authorImage} />
                       <AvatarFallback>{author.username}</AvatarFallback>
                     </Avatar>
                     <div>
+                      {/* Author's name */}
                       <h4 className="text-sm font-semibold">{author.name}</h4>
+                      {/* Author's username */}
                       <p className="text-xs text-gray-500 dark:text-gray-400">
                         @{author.username}
                       </p>
@@ -68,8 +79,10 @@ export function FightCard({ challenge }: FightCardProps) {
                 </HoverCardContent>
               </HoverCard>
               <span className="text-gray-500 dark:text-gray-400">vs</span>
+              {/* Hover card for the challenged user */}
               <HoverCard>
                 <HoverCardTrigger asChild>
+                  {/* Challenged user's avatar */}
                   <Avatar>
                     <AvatarImage src={challengedImage} />
                     <AvatarFallback>{challenged.username}</AvatarFallback>
@@ -77,14 +90,17 @@ export function FightCard({ challenge }: FightCardProps) {
                 </HoverCardTrigger>
                 <HoverCardContent>
                   <div className="flex items-center space-x-2">
+                    {/* Challenged user's avatar in the hover card */}
                     <Avatar>
                       <AvatarImage src={challengedImage} />
                       <AvatarFallback>{challenged.username}</AvatarFallback>
                     </Avatar>
                     <div>
+                      {/* Challenged user's name */}
                       <h4 className="text-sm font-semibold">
                         {challenged.name}
                       </h4>
+                      {/* Challenged user's username */}
                       <p className="text-xs text-gray-500 dark:text-gray-400">
                         @{challenged.username}
                       </p>
@@ -94,20 +110,26 @@ export function FightCard({ challenge }: FightCardProps) {
               </HoverCard>
             </div>
 
+            {/* Fight participants */}
             <h2 className="text-xs text-gray-500 dark:text-gray-400">
               {author.username} VS {challenged.username}
             </h2>
 
             <div className="flex items-center space-x-2">
+              {/* Calendar icon */}
               <CalendarIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              {/* Fight date and time */}
               <span className="text-gray-500 dark:text-gray-400">
                 {formattedDate} at {formattedTime}
               </span>
+              {/* Map pin icon */}
               <MapPinIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              {/* Fight location */}
               <span className="text-gray-500 dark:text-gray-400">
                 {location}
               </span>
             </div>
+            {/* Fight description */}
             <p className="text-center text-sm text-gray-500 dark:text-gray-400">
               {description}
             </p>
@@ -118,6 +140,7 @@ export function FightCard({ challenge }: FightCardProps) {
   );
 }
 
+// Calendar icon component
 function CalendarIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -140,6 +163,7 @@ function CalendarIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+// Map pin icon component
 function MapPinIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg

@@ -1,35 +1,41 @@
 // getAllFights.tsx
-"use client";
-import { useQuery } from "@tanstack/react-query";
-import { Challenge } from "~/@types/fight.type";
-import Loading from "~/app/loading";
-import { FightCard } from "~/components/main-fight-card";
+// This file is responsible for fetching and displaying all fights
 
+// Import necessary dependencies
+import { useQuery } from "@tanstack/react-query"; // Library for managing and caching asynchronous data
+import { Challenge } from "~/@types/fight.type"; // Type definition for Challenge
+import Loading from "~/app/loading"; // Loading component
+import { FightCard } from "~/components/main-fight-card"; // FightCard component
+
+// Function to fetch all fights from the API
 async function fetchAllFights() {
   const response = await fetch("/api/allFights", {
-    cache: "no-store", // vercel cache-busting
+    cache: "no-store", // Disable caching to ensure fresh data
   });
   if (!response.ok) {
-    throw new Error("Failed to fetch fights");
+    throw new Error("Failed to fetch fights"); // Throw an error if the API request fails
   }
-  return response.json() as Promise<Challenge[]>;
+  return response.json() as Promise<Challenge[]>; // Return the response as an array of Challenge objects
 }
 
+// Component to display all fights
 export default function GetAllFights() {
   const {
-    data: challenges,
-    isLoading,
-    isError,
+    data: challenges, // Fetched data
+    isLoading, // Loading state
+    isError, // Error state
   } = useQuery({
-    queryKey: ["allFights"],
-    queryFn: fetchAllFights,
-    refetchOnWindowFocus: true,
+    queryKey: ["allFights"], // Unique key for the query
+    queryFn: fetchAllFights, // Function to fetch the data
+    refetchOnWindowFocus: true, // Automatically refetch data when the window regains focus
   });
 
+  // If data is still loading, display the Loading component
   if (isLoading) {
     return <Loading />;
   }
 
+  // If there is an error, display an error message
   if (isError) {
     return (
       <div className="mt-4 flex h-screen flex-col">
@@ -48,6 +54,7 @@ export default function GetAllFights() {
     );
   }
 
+  // If data is available, display the FightCard components for each challenge
   return (
     <div className="flex-row-reverse">
       {challenges?.map((challenge: Challenge) => {
@@ -56,3 +63,5 @@ export default function GetAllFights() {
     </div>
   );
 }
+
+// Path: client/src/components/main-fight-card.tsx

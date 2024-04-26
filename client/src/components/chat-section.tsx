@@ -10,17 +10,19 @@ import { Message } from "~/@types/message.type";
 import Loading from "~/app/loading";
 import { env } from "~/env";
 
+// Function to fetch fight messages from the server
 async function fetchFightMessages({
   queryKey,
 }: {
   queryKey: [string, string];
 }) {
   const [, fightId] = queryKey;
-  return (await fetch(`${env.NEXT_PUBLIC_SOCKET_URL}/api/fights/${fightId}/messages`).then(
-    (res) => res.json(),
-  )) as Promise<Message[]>;
+  return (await fetch(
+    `${env.NEXT_PUBLIC_SOCKET_URL}/api/fights/${fightId}/messages`,
+  ).then((res) => res.json())) as Promise<Message[]>;
 }
 
+// Function to send a message to the server
 function sendMessage({
   fightId,
   messageInput,
@@ -41,6 +43,7 @@ function sendMessage({
   }).then((res) => res.json());
 }
 
+// ChatSection component
 export default function ChatSection({
   fightId,
   userId,
@@ -52,6 +55,7 @@ export default function ChatSection({
 }) {
   const [messageInput, setMessageInput] = useState("");
 
+  // Fetch initial messages using useQuery hook
   const {
     data: initialMessages,
     isLoading,
@@ -62,23 +66,31 @@ export default function ChatSection({
     refetchOnWindowFocus: false,
   });
 
+  // Get updated messages using useFightMessages hook
   const messages = useFightMessages({ fightId, initialMessages });
 
+  // Use useMutation hook to handle sending messages
   const { mutate } = useMutation({
     mutationFn: sendMessage,
   });
+
+  // Event handler for input change
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessageInput(e.target.value);
   };
 
+  // Event handler for sending a message
   const handleSendMessage = () => {
     mutate({ fightId, messageInput, userId, username });
     setMessageInput("");
   };
 
+  // Render loading state if data is still loading
   if (isLoading) {
     return <Loading />;
   }
+
+  // Render the chat section
   return (
     <section className="w-full py-12 md:py-24 lg:py-32" id="chat">
       <div className="mx-auto max-w-4xl overflow-hidden rounded-xl bg-gray-100 p-4 shadow dark:bg-gray-800">
@@ -118,3 +130,5 @@ export default function ChatSection({
     </section>
   );
 }
+
+// Path: client/src/components/chat-section.tsx

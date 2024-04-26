@@ -15,6 +15,7 @@ import {
 import { cn } from "~/lib/utils";
 import { Button } from "./ui/button";
 
+// Array of components with their title, href, and description
 const components: { title: string; href: string; description: string }[] = [
   {
     title: "Alert Dialog",
@@ -53,10 +54,12 @@ const components: { title: string; href: string; description: string }[] = [
   },
 ];
 
+// NavigationMenuX component
 export function NavigationMenuX() {
   return (
     <NavigationMenu className="flex justify-between">
       <NavigationMenuList>
+        {/* Create Fight button */}
         <NavigationMenuItem>
           <Link href="/myfights/create" legacyBehavior passHref>
             <Button className="hover:shadow-mdw-36 transform border border-neutral-300 text-base text-slate-100 transition duration-200 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2">
@@ -64,6 +67,7 @@ export function NavigationMenuX() {
             </Button>
           </Link>
         </NavigationMenuItem>
+        {/* Sent button */}
         <NavigationMenuItem>
           <Link href="/myfights/sent" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
@@ -73,11 +77,12 @@ export function NavigationMenuX() {
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
+        {/* Received button */}
         <NavigationMenuItem>
           <Link href="/myfights/recieved" legacyBehavior passHref>
             <NavigationMenuLink>
               <Button className="hover:shadow-mdw-36 transform border border-neutral-300 text-base text-slate-100 transition duration-200 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2">
-                Recieved
+                Received
               </Button>
             </NavigationMenuLink>
           </Link>
@@ -87,6 +92,7 @@ export function NavigationMenuX() {
   );
 }
 
+// ListItem component
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">

@@ -34,10 +34,16 @@ const updateUsername = async (username: string): Promise<apires> => {
   return response.json() as Promise<apires>;
 };
 
+/**
+ * Renders the account card component.
+ * This component allows users to update their profile information.
+ */
 export function AccountCard() {
   const { data: session } = useSession();
   const { toast } = useToast();
   const [username, setUsername] = useState("");
+
+  // Mutation to update the username
   const { mutate: updateUsernameMutation, isPending } = useMutation<
     apires,
     Error,
@@ -47,7 +53,7 @@ export function AccountCard() {
     onSuccess(data, variables, context) {
       toast({
         title: "Success",
-        description: `updated to ${data.username ?? " "}`,
+        description: `Updated to ${data.username ?? " "}`,
         variant: "default",
       });
     },
@@ -60,30 +66,12 @@ export function AccountCard() {
     },
   });
 
+  /**
+   * Handles the form submission.
+   * @param e - The form event.
+   */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // try {
-    //   const response = await fetch("/api/username", {
-    //     method: "PUT",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ username }),
-    //   });
-
-    //   if (response.ok) {
-    //     // Schema updated successfully
-    //     const { username } = (await response.json()) as apires;
-    //     setUsername(() => username);
-    //   } else {
-    //     // Handle error case
-    //     console.error("Error updating schema");
-    //   }
-    // } catch (error) {
-    //   console.error("Error updating schema:", error);
-    //   // Handle error case
-    // }
-
     updateUsernameMutation(username);
   };
 
@@ -141,3 +129,5 @@ export function AccountCard() {
     );
   }
 }
+
+// Path: client/src/components/AccoutnCard.tsx

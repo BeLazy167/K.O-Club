@@ -1,5 +1,10 @@
-import { Skeleton } from "~/components/ui/skeleton";
+// app/loading.tsx
 
+import { Skeleton } from "~/components/ui/skeleton";
+/**
+ * Renders a loading component.
+ * @returns JSX element representing the loading component.
+ */
 export default function Loading() {
   return (
     <div className="flex h-screen flex-col items-center justify-center">

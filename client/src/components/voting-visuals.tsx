@@ -13,6 +13,7 @@ export function VotingVisuals({
   author: User;
   challenged: User;
 }) {
+  // State variables to store the data and calculations
   const [data, setData] = useState<Record<string, number>>({});
   const [totalVotes, setTotalVotes] = useState(0);
   const [authorVotes, setAuthorVotes] = useState(0);
@@ -21,6 +22,7 @@ export function VotingVisuals({
   const [challengedPercentage, setChallengedPercentage] = useState(0);
 
   useEffect(() => {
+    // Calculate the voting data and percentages whenever the votes, author, or challenged user changes
     const newData = votes.reduce(
       (acc, vote) => {
         acc[vote.votedForId] = (acc[vote.votedForId] ?? 0) + 1;
@@ -35,6 +37,7 @@ export function VotingVisuals({
     const newAuthorPercentage = (newAuthorVotes / newTotalVotes) * 100;
     const newChallengedPercentage = 100 - newAuthorPercentage;
 
+    // Update the state variables with the new data and calculations
     setData(newData);
     setTotalVotes(newTotalVotes);
     setAuthorVotes(newAuthorVotes);
@@ -69,9 +72,8 @@ export function VotingVisuals({
               style={{ width: `${challengedPercentage}%` }}
             />
           </div>
-          <div className="mt-2 text-sm font-medium">
-            {challengedPercentage.toFixed(1)}% ({challengedVotes} votes)
-          </div>
+          <div className="mt-2 text-sm font-medium"></div>
+          {challengedPercentage.toFixed(1)}% ({challengedVotes} votes)
         </div>
       </div>
     </div>

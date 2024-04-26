@@ -18,6 +18,7 @@ import { User } from "~/@types/user.type";
 import { toast } from "./ui/use-toast";
 
 export function FightForm() {
+  // State variables
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User>();
@@ -28,12 +29,15 @@ export function FightForm() {
     date: "",
     time: "",
   });
+
+  // Event handlers
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevData) => ({
       ...prevData,
       title: e.target.value,
     }));
   };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -43,6 +47,7 @@ export function FightForm() {
       [id]: value,
     }));
   };
+
   const handleSearch = debounce(async (query: string) => {
     if (query.trim() !== "") {
       const response = await fetch("/api/username/search", {
@@ -110,6 +115,7 @@ export function FightForm() {
       console.error("Error creating fight invitation:", error);
     }
   };
+
   const handleChallangedChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -120,12 +126,14 @@ export function FightForm() {
   return (
     <Card key="1">
       <form onSubmit={handleSubmit}>
+        {/* Card Header */}
         <CardHeader>
           <CardTitle>Create fight invitation</CardTitle>
           <CardDescription>Challenge someone to a duel.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
+            {/* Title */}
             <div className="space-y-2">
               <Label htmlFor="title">Title</Label>
               <Input
@@ -135,6 +143,7 @@ export function FightForm() {
                 onChange={handleTitleChange}
               />
             </div>
+            {/* Description */}
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
               <Textarea
@@ -144,6 +153,7 @@ export function FightForm() {
                 onChange={handleChange}
               />
             </div>
+            {/* Challenged User */}
             <div className="space-y-2">
               <Label htmlFor="challenged">Challenged User</Label>
               <div className="flex overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800">
@@ -161,6 +171,7 @@ export function FightForm() {
                 />
               )}
             </div>
+            {/* Location */}
             <div className="space-y-2">
               <Label htmlFor="location">Location</Label>
               <Input
@@ -170,6 +181,7 @@ export function FightForm() {
                 onChange={handleChange}
               />
             </div>
+            {/* Date and Time */}
             <div className="grid grid-cols-2 items-center gap-4">
               <div className="space-y-2">
                 <Label htmlFor="date">Date</Label>
@@ -192,6 +204,7 @@ export function FightForm() {
             </div>
           </div>
         </CardContent>
+        {/* Card Footer */}
         <CardFooter className="flex justify-end">
           <Button type="submit">Create fight</Button>
         </CardFooter>
@@ -199,3 +212,4 @@ export function FightForm() {
     </Card>
   );
 }
+// Path: client/src/components/fight-form.tsx

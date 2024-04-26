@@ -8,6 +8,7 @@ import { useToast } from "./ui/use-toast";
 import { VotingVisuals } from "./voting-visuals";
 import Loading from "~/app/loading";
 
+// Function to fetch personal vote data for a specific fight
 const fetchPersonalVote = async (fightId: string) => {
   const response = await fetch(`/api/fight/vote/${fightId}`, {
     method: "GET",
@@ -18,6 +19,7 @@ const fetchPersonalVote = async (fightId: string) => {
   return response.json() as Promise<Vote>;
 };
 
+// Function to vote for a fight
 const voteFight = async (data: VotingRequest, fightId: string) => {
   const response = await fetch(`/api/fight/vote/${fightId}`, {
     method: "POST",
@@ -32,6 +34,7 @@ const voteFight = async (data: VotingRequest, fightId: string) => {
   return response.json() as Promise<Vote>;
 };
 
+// Function to fetch all votes for a specific fight
 const allVotes = async (fightId: string) => {
   const response = await fetch(`/api/fight/vote/${fightId}/all`, {
     method: "GET",
@@ -54,12 +57,14 @@ export default function VoteSection({
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  // Fetch personal vote data for the current fight
   const { data: personalVote, isLoading: isPersonalVoteLoading } = useQuery({
     queryKey: ["personalVote", fightId],
     queryFn: () => fetchPersonalVote(fightId),
     refetchOnWindowFocus: false,
   });
 
+  // Fetch all votes for the current fight
   const { data: votes, isLoading: isVotesLoading } = useQuery({
     queryKey: ["votes", fightId],
     queryFn: () => allVotes(fightId),
@@ -67,9 +72,11 @@ export default function VoteSection({
     refetchInterval: 1000,
   });
 
+  // Vote mutation function
   const { mutate, isPending: isMutating } = useMutation({
     mutationFn: (data: VotingRequest) => voteFight(data, fightId),
     onSuccess: async (data) => {
+      // Invalidate queries for votes and personal vote to trigger refetch
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey[0] === "votes",
         queryKey: ["votes", fightId],
@@ -78,6 +85,7 @@ export default function VoteSection({
         predicate: (query) => query.queryKey[0] === "personalVote",
         queryKey: ["personalVote", fightId],
       });
+      // Show toast notification for successful vote submission
       toast({
         title: "Vote submitted",
         description: `You voted for ${data?.votedForUsername}`,
@@ -89,6 +97,7 @@ export default function VoteSection({
     return <Loading />;
   }
 
+  // Handle click event when voting button is clicked
   const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const selected = event.currentTarget.value;
@@ -101,12 +110,14 @@ export default function VoteSection({
       votedForId = challenged.id;
       votedForUsername = challenged.username ?? "";
     }
+    // Show toast notification while vote is being submitted
     toast({
       title: "Submitting vote...",
       description: "Please wait a moment",
       duration: 5000,
     });
     try {
+      // Call the voteFight mutation function to submit the vote
       mutate({ votedForId, votedForUsername });
     } catch (error) {
       console.error("Failed to vote for the fight:", error);
@@ -174,6 +185,8 @@ export default function VoteSection({
     </section>
   );
 }
+
+// SVG icon component for user
 function UserIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg

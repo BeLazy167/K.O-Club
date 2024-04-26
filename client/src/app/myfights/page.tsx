@@ -1,3 +1,6 @@
+// app/myfights/page.tsx
+
 export default function Page() {
-  return <div className="flex justify-center">My fights intial page</div>;
+  // This component renders the initial page for "My Fights"
+  return <div className="flex justify-center">My fights initial page</div>;
 }

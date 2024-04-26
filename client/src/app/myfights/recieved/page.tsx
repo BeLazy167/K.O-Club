@@ -1,14 +1,14 @@
-// components/Recieved.tsx
+//app/myfights/recieved/page.tsx
 "use client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { RecievedFight } from "~/@types/recieved.type";
 import Loading from "~/app/loading";
-import FightCard from "~/components/fight-card";
 import { Fightcardv2 } from "~/components/fightcardv2";
 import { toast } from "~/components/ui/use-toast";
 import { Unauthorized } from "~/components/unauthorized";
 import { queryClient } from "~/lib/queryClientSingleton";
+// Function to fetch received fights from the API
 const fetchRecievedFights = async () => {
   const response = await fetch("/api/fight/recieved");
   if (!response.ok) {
@@ -16,6 +16,8 @@ const fetchRecievedFights = async () => {
   }
   return response.json() as Promise<RecievedFight[]>;
 };
+
+// Function to update the fight status
 const updateFightStatus = async (fightId: string) => {
   const response = await fetch(`/api/fight/${fightId}/accept`, {
     method: "GET",
@@ -24,6 +26,15 @@ const updateFightStatus = async (fightId: string) => {
     throw new Error("Error updating fight status");
   }
 };
+/**
+ * Renders the ConfirmedFights component.
+ * This component displays a list of received fight requests.
+ * It fetches the fights data using the useQuery hook and updates the fight status using the useMutation hook.
+ * If the user is not authenticated, it renders the Unauthorized component.
+ * If there is an error fetching the fights data, it renders an error message.
+ * Otherwise, it renders the list of received fight requests using the Fightcardv2 component.
+ */
+
 export default function ConfirmedFights() {
   const { data: session } = useSession();
   const {

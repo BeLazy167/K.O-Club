@@ -12,12 +12,14 @@ import { SentFight } from "~/@types/sentfight.type";
 import { User } from "~/@types/user.type";
 import { RecievedFight } from "~/@types/recieved.type";
 
+// Interface for SentFightInt
 export interface SentFightInt {
   fightData: SentFight;
   current: User;
   fightType: string;
 }
 
+// Interface for RecievedFightInt
 export interface RecievedFightInt {
   fightData: RecievedFight;
   current: User;
@@ -25,6 +27,7 @@ export interface RecievedFightInt {
   acceptFight: (fightId: string) => void;
 }
 
+// Fightcardv2 component
 export function Fightcardv2({
   fight,
 }: {
@@ -65,18 +68,23 @@ export function Fightcardv2({
 
   return (
     <Card className="mt-4">
+      {/* Card Header */}
       <CardHeader>
         <div className="flex items-center space-x-4">
           <div className="flex flex-col">
+            {/* Card Title */}
             <CardTitle>{title}</CardTitle>
+            {/* Card Description */}
             <CardDescription>
               {description ?? "No description provided."}
             </CardDescription>
           </div>
         </div>
       </CardHeader>
+      {/* Card Content */}
       <CardContent>
         <div className="grid grid-cols-2 gap-4">
+          {/* Current User */}
           <div className="flex items-center space-x-4">
             <img
               alt="Image"
@@ -95,6 +103,7 @@ export function Fightcardv2({
               <p className="text-sm text-gray-500">{current.email}</p>
             </div>
           </div>
+          {/* Challenged User */}
           <div className="flex items-center space-x-4">
             <img
               alt="Image"
@@ -117,40 +126,49 @@ export function Fightcardv2({
           </div>
         </div>
         <div className="mt-4 space-y-4">
+          {/* Date */}
           <div className="flex items-center space-x-2">
             <CalendarIcon className="h-4 w-4 flex-shrink-0 text-gray-500" />
             <span className="text-sm font-medium">{formattedDate}</span>
           </div>
+          {/* Time */}
           <div className="flex items-center space-x-2">
             <ClockIcon className="h-4 w-4 flex-shrink-0 text-gray-500" />
             <span className="text-sm font-medium">{formattedTime}</span>
           </div>
+          {/* Location */}
           <div className="flex items-center space-x-2">
             <MapPinIcon className="h-4 w-4 flex-shrink-0 text-gray-500" />
             <span className="text-sm font-medium">{location}</span>
           </div>
         </div>
       </CardContent>
+      {/* Card Footer */}
       <CardFooter className="flex justify-end">
         <div className="flex items-center space-x-2">
+          {/* Fight Type */}
           {fight.fightType === "sent" ? (
+            // Challenged Accepted
             challengedAccepted ? (
               <>
                 <CheckCircleIcon className="h-4 w-4 text-green-500" />
                 <span className="text-sm font-medium">Accepted</span>
               </>
             ) : (
+              // Pending
               <>
                 <PendingCircleIcon className="h-4 w-4 text-yellow-500" />
                 <span className="text-sm font-medium">Pending</span>
               </>
             )
           ) : challengedAccepted ? (
+            // Challenged Accepted
             <>
               <CheckCircleIcon className="h-4 w-4 text-green-500" />
               <span className="text-sm font-medium">Accepted</span>
             </>
           ) : (
+            // Accept Fight Button
             <Button
               variant="outline"
               size="sm"
@@ -169,6 +187,7 @@ export function Fightcardv2({
   );
 }
 
+// Calendar Icon component
 function CalendarIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -190,6 +209,8 @@ function CalendarIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+// Pending Circle Icon component
 function PendingCircleIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -210,6 +231,8 @@ function PendingCircleIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+// Check Circle Icon component
 function CheckCircleIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -230,6 +253,7 @@ function CheckCircleIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+// Clock Icon component
 function ClockIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -250,6 +274,7 @@ function ClockIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+// Map Pin Icon component
 function MapPinIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -269,3 +294,5 @@ function MapPinIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+// Path: client/src/components/fightcardv2.tsx

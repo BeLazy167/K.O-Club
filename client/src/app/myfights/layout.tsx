@@ -1,5 +1,5 @@
-import Link from "next/link";
-
+// app/myfights/layout.tsx
+// This is the layout component for the MyFights page.
 import React from "react";
 import { NavigationMenuX } from "~/components/Navigation";
 

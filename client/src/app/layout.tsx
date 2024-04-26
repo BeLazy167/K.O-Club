@@ -21,6 +21,11 @@ export const metadata = {
   icon: "../../public/favicon.ico",
 };
 
+/**
+ * Root layout component that wraps the entire application.
+ * @param children - The child components to be rendered within the layout.
+ * @returns The JSX element representing the root layout.
+ */
 export default function RootLayout({
   children,
 }: {
@@ -30,12 +35,19 @@ export default function RootLayout({
     <SessionWrapper>
       <html lang="en">
         <body className={`font-sans ${inter.variable}`}>
+          {/* Socket context provider */}
           <SocketContextProvider>
+            {/* Tanstack provider */}
             <TanstackProvider>
+              {/* Main layout container */}
               <div className="flex min-h-[100dvh] flex-col justify-between">
+                {/* Navbar component */}
                 <Navbar />
+                {/* Suspense fallback for lazy loading */}
                 <Suspense fallback={<Loading />}>{children}</Suspense>
+                {/* Toast notifications */}
                 <Toaster />
+                {/* Footer component */}
                 <Footer />
               </div>
             </TanstackProvider>

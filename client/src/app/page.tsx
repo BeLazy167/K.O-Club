@@ -1,12 +1,12 @@
-import Link from "next/link";
+// app/page.tsx
+// Import the LandingPage component
 import LandingPage from "~/components/LandingPage";
-import { Button } from "~/components/ui/button";
 
+// Define the HomePage component
 export default function HomePage() {
-  const isAuth = false;
   return (
-    // <main className=" text-whit min-h-screen bg-gradient-to-b from-[#2e026d] to-[#15162c]">
     <main>
+      {/* Render the LandingPage component */}
       <LandingPage />
     </main>
   );

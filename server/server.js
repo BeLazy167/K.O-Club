@@ -1,15 +1,15 @@
-// Import required dependencies
 import express from "express";
 import mongoose from "mongoose";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
-
 import env from "dotenv";
+
+// Import required dependencies
+
 env.config();
+
 // Create an instance of the Express application
-console.log(process.env.MONGODB_URI, "MONGODB_URI"); //danger
-console.log(process.env.CLIENT_URL, "CLIENT_URL"); //danger
 const app = express({});
 const server = createServer(app);
 const io = new Server(server, {
@@ -151,6 +151,7 @@ app.post("/api/fights/:fightId/messages", sendMessage);
 app.get("/api/fights/:fightId/messages", getMessages);
 
 const userSocketMap = {};
+
 // Socket.IO event handling
 io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId;
