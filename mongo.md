@@ -11,9 +11,8 @@ MongoDB is a flexible and scalable NoSQL database solution that allows you to st
 3. Follow the prompts to create an account. You'll need to provide your email address, create a password, and agree to the terms of service.
 4. Once you've created an account, log in to MongoDB Atlas.
 
-   ![mongodbImage](https://webimages.mongodb.com/_com_assets/cms/kko6fv1oxcwoavwi9-mongodb-atlas-create-project.png?auto=format%2Ccompress)
-   ![mongodbImage](https://webimages.mongodb.com/_com_assets/cms/kko6gp6k5mcdhjw3w-mongodb-atlas-create-cluster.png?auto=format%2Ccompress)
-   ![mongodbImage](https://webimages.mongodb.com/_com_assets/cms/kko6gby3qdbez0sjw-mongodb-atlas-choose-cloud-provider.png?auto=format%2Ccompress)
+   
+
 
 ## Step 2: Create a Cluster
 
@@ -21,6 +20,10 @@ MongoDB is a flexible and scalable NoSQL database solution that allows you to st
 2. Click on the **Build a New Cluster** button.
 3. Choose a cloud provider, region, and cluster tier that best suits your needs. You can also customize additional settings such as cluster name and shared cluster options.
 4. Click on the **Create Cluster** button to provision your cluster. This may take a few minutes.
+
+   ![mongodbImage](https://webimages.mongodb.com/_com_assets/cms/kko6fv1oxcwoavwi9-mongodb-atlas-create-project.png?auto=format%2Ccompress)
+   ![mongodbImage](https://webimages.mongodb.com/_com_assets/cms/kko6gp6k5mcdhjw3w-mongodb-atlas-create-cluster.png?auto=format%2Ccompress)
+   ![mongodbImage](https://webimages.mongodb.com/_com_assets/cms/kko6gby3qdbez0sjw-mongodb-atlas-choose-cloud-provider.png?auto=format%2Ccompress)
 
 ## Step 3: Create a Database User
 
