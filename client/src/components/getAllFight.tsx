@@ -1,6 +1,6 @@
 // getAllFights.tsx
 // This file is responsible for fetching and displaying all fights
-
+"use client"
 // Import necessary dependencies
 import { useQuery } from "@tanstack/react-query"; // Library for managing and caching asynchronous data
 import { Challenge } from "~/@types/fight.type"; // Type definition for Challenge
