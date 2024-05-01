@@ -97,11 +97,13 @@ Before proceeding with the setup, ensure that you have the following installed o
 2. **Access the K0 Club application:**
    Open your browser and visit `http://localhost:3000` to access the K0 Club application.
 
-## Additional Configuration
+## Additional Configuration **Needed**
 
 -   **Google Authentication:**
     If you want to use Google Authentication, set up a Google OAuth application and obtain the necessary client ID and client secret. Update the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variables in the client's `.env` file accordingly.
 
+    [Google Setup Guide](googleauth.md)
+    
 -   **Troubleshooting:**
     If you encounter any issues during the setup process, please refer to the troubleshooting section in the documentation or reach out to the development team for assistance.
 

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { db } from "~/server/db";
 import { authOptions } from "~/server/auth";
-import { fights } from "~/server/db/schema";
+import { fights, votes } from "~/server/db/schema";
 
 // Handler for GET requests
 export async function GET(request: Request) {
@@ -16,6 +16,7 @@ export async function GET(request: Request) {
   try {
     // Delete all fights from the database
     //eslint-disable-next-line
+    await db.delete(votes);
     await db.delete(fights);
     // Return success response with a message
     return NextResponse.json(
